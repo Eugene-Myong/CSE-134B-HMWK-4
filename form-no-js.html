@@ -3,32 +3,124 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>form-no-js.html</title>
+        <title>form-no-js</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center; 
+                align-items: flex-start; 
+                padding: 2rem;
+            }
+
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+                width: 100%;
+                max-width: 400px;
+            }
+
+            label {
+                font-weight: bold;
+                margin-bottom: 0.2rem;
+            }
+
+            input[type="text"], input[type="email"], input[list], textarea {
+                padding: 0.5rem;
+                font-size: 1rem;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+                width: 100%;
+            }
+
+            input[type="submit"] {
+                padding: 0.5rem;
+                font-size: 1rem;
+                cursor: pointer;
+                width: 105%;
+            }
+
+            output {
+                font-size: 0.9rem;
+                min-height: 1.2em;
+            }
+
+            output#error {
+                color: red;
+            }
+
+            output#info {
+                color: green;
+            }
+
+            /*form validation*/
+
+            input:required {
+                border-left: 3px solid #007BFF; 
+            }
+            
+            textarea:required {
+                border-left: 3px solid #007BFF;
+            }
+
+            input[type="text"]:valid, input[type="email"]:valid, input[list]:valid {
+                border-color: green;
+            }
+            
+            input[type="text"]:invalid, input[type="email"]:invalid, input[list]:invalid {
+                border-color: red;
+            }
+            
+            textarea:valid {
+                border-color: green;
+            }
+
+            textarea:invalid {
+                border-color: red;
+            }
+
+            input#name:focus:invalid ~ output#error::before {
+                content: "Name must be 2-50 letters. Only alphanumeric characters are allowed.";
+            }
+
+            input#email:focus:invalid ~ output#error::before {
+                content: "Please include an @ and domain in your email.";
+            }
+
+            input#reason:focus:invalid ~ output#error::before {
+                content: "Please indicate a reason. Only alphanumeric characters are allowed.";
+            }
+
+            textarea#message:focus:invalid ~ output#error::before {
+                content: "Message must be at least 5 characters.";
+            }
+
+            input#name:valid ~ output#error::before, input#email:valid ~ output#error::before, input#reason:valid ~ output#error::before, textarea#message:valid ~ output#error::before {
+                content: "";
+            }
+                        
+        </style>
     </head>
     <body>
-        <header>
-            <h1>form-no-js.html</h1>
-        </header>
-        <main>
-            <form id="contactform" action="https://httpbin.org/post" method="post">
-                <fieldset>
-                    <label for="name">Name: </label>
-                    <input type="text" name="name" id="name" placeholder="Name" required>
-                    <label for="email">Email: </label>
-                    <input type="email" name="email" id="email" placeholder="email" required>
-                    <label for="reason">Reason for contact: </label>
-                    <input type="text" name="reason" id="reason" list="reasonsuggestions" placeholder="reason" required>
-                    <datalist id="reasonsuggestions">
-                        <option value="Question">
-                        <option value="Comment">
-                        <option value="Want to Connect">
-                    </datalist>
-                    <label for="message">Message: </label>
-                    <textarea name="message" id="message" rows="5" cols="30" placeholder="message" required></textarea>   
-                    <input type="hidden" name="possible_bot" value="true">
-                    <input type="Submit" id="submitbutton" class="linkbutton" value="Submit">               
-                </fieldset>
-            </form>
-        </main>
+        <form id="contactform" action="https://httpbin.org/post" method="post">
+            <label for="name">Name:</label>
+            <input type="text" name="name" id="name" placeholder="Name" minlength="2" maxlength="50"  pattern="[A-Za-z0-9\s]+" required>
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" placeholder="Email" minlength="2" maxlength="50" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" required>
+            <label for="reason">Reason for contact:</label>
+            <input type="text" name="reason" id="reason" list="reasonsuggestions" placeholder="Reason" minlength="2" maxlength="50" pattern="[A-Za-z0-9\s]+" required>
+            <datalist id="reasonsuggestions">
+                <option value="Question">
+                <option value="Comment">
+                <option value="Want to Connect">
+            </datalist>
+            <label for="message">Message:</label>
+            <textarea name="message" id="message" rows="5" placeholder="Message" minlength="5" maxlength="500" required></textarea>
+            <input type="hidden" name="possible_bot" value="true">
+            <input type="submit" value="Submit">
+            <output id="error" name="error"></output>
+            <output id="info" name="info"></output>
+        </form>
     </body>
 </html>
