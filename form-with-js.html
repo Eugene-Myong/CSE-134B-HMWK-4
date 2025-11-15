@@ -51,228 +51,262 @@
             }
 
             output#info {
-                color: green;
+                color: orange;
             } 
-                        input:required {
-                border-left: 3px solid #007BFF; 
-            }
-            
-            textarea:required {
-                border-left: 3px solid #007BFF;
-            }
 
-            input[type="text"]:valid, input[type="email"]:valid, input[list]:valid {
-                border-color: green;
-            }
-            
-            input[type="text"]:invalid, input[type="email"]:invalid, input[list]:invalid {
-                border-color: red;
-            }
-            
-            textarea:valid {
-                border-color: green;
-            }
-
-            textarea:invalid {
-                border-color: red;
-            }                       
         </style>
 
         <script>
+        const form_errors = [];
+
         function loadHandler() {
             nameValidation();
             emailValidation();
             reasonValidation();
             messageValidation();
+
+            maskInvalidChars(document.getElementById("name"), /[A-Za-z0-9\s]/);
+            maskInvalidChars(document.getElementById("reason"), /[A-Za-z0-9\s]/);
+            maskInvalidChars(document.getElementById("email"), /[A-Za-z0-9@._-]/);
+
+            setupCharCounter();
+            setupFormErrorCapture();
         }
 
         function nameValidation () {
             const name = document.getElementById("name");
-            let error = document.getElementById("error");
-            let errormsg;
+            const info = document.getElementById("info");
+
             name.addEventListener("input", () => {
                 name.setCustomValidity("");
-                if (name.checkValidity()) {
-                    error.textContent = "";
-                    return;
-                } else {
+                if (!name.checkValidity()) {
                     showNameError();
+                } else {
+                    info.textContent = "";
                 }
             });
         }
 
         function showNameError () {
             const name = document.getElementById("name");
-            let error = document.getElementById("error");
-            let errormsg;
+            const info = document.getElementById("info");
+            let infomsg;
+
             if (name.validity.tooShort) {
-                errormsg = "Name must be at least 2 characters.";
-                name.setCustomValidity(errormsg);
-                error.textContent = errormsg;
-                return;
+                infomsg = "Name must be at least 2 characters.";
+            } else if (name.validity.patternMismatch) {
+                infomsg = "Only alphanumeric characters allowed.";
+            } else if (name.validity.valueMissing) {
+                infomsg = "Name is required.";
             }
 
-            if (name.validity.patternMismatch) {
-                errormsg = "Only alphanumeric characters allowed.";
-                name.setCustomValidity(errormsg);
-                error.textContent = errormsg;
-                return;
-            }
+            name.setCustomValidity(infomsg);
+            info.textContent = infomsg;
 
-            if (name.validity.valueMissing) {
-                errormsg = "Name is required.";
-                name.setCustomValidity(errormsg);
-                error.textContent = errormsg;
-                return;
-            }
-
-            error.textContent = "";
-            message.setCustomValidity("");
+            form_errors.push({
+                field: "name",
+                value: name.value,
+                error: infomsg,
+            });
         }
 
         function emailValidation() {
             const email = document.getElementById("email");
-            let error = document.getElementById("error");
-            let errormsg;
+            const info = document.getElementById("info");
+
             email.addEventListener("input", () => {
                 email.setCustomValidity("");
-                if (email.checkValidity()) {
-                    error.textContent = "";
-                    return;
-                } else {
+                if (!email.checkValidity()) {
                     showEmailError();
+                } else {
+                    info.textContent = "";
                 }
             });
         }
 
         function showEmailError() {
             const email = document.getElementById("email");
-            let error = document.getElementById("error");
-            let errormsg;
+            const info = document.getElementById("info");
+            let infomsg;
+
             if (email.validity.tooShort) {
-                errormsg = "Email must be at least 2 characters.";
-                email.setCustomValidity(errormsg);
-                error.textContent = errormsg;
-                return;
-            }
-            if (email.validity.patternMismatch) {
-                errormsg = "Email must contain @ and a domain.";
-                email.setCustomValidity(errormsg);
-                error.textContent = errormsg;
-                return;
+                infomsg = "Email must be at least 2 characters.";
+            } else if (email.validity.patternMismatch) {
+                infomsg = "Email must contain @ and a domain.";
+            } else if (email.validity.valueMissing) {
+                infomsg = "Email is required.";
             }
 
-            if (email.validity.valueMissing) {
-                errormsg = "Email is required.";
-                email.setCustomValidity(errormsg);
-                error.textContent = errormsg;
-                return;
-            }
+            email.setCustomValidity(infomsg);
+            info.textContent = infomsg;
 
-            error.textContent = "";
-            message.setCustomValidity("");
+            form_errors.push({
+                field: "email",
+                value: email.value,
+                error: infomsg,
+            });
         }
+
 
         function reasonValidation() {
             const reason = document.getElementById("reason");
-            let error = document.getElementById("error");
-            let errormsg;
+            const info = document.getElementById("info");
+
             reason.addEventListener("input", () => {
                 reason.setCustomValidity("");
-                if (reason.checkValidity()) {
-                    error.textContent = "";
-                    return;
-                } else {
+                if (!reason.checkValidity()) {
                     showReasonError();
+                } else {
+                    info.textContent = "";
                 }
             });
         }
 
         function showReasonError() {
             const reason = document.getElementById("reason");
-            let error = document.getElementById("error");
-            let errormsg;
+            const info = document.getElementById("info");
+            let infomsg;
+
             if (reason.validity.tooShort) {
-                errormsg = "Reason must be at least 2 characters.";
-                reason.setCustomValidity(errormsg);
-                error.textContent = errormsg;
-                return;
+                infomsg = "Reason must be at least 2 characters.";
+            } else if (reason.validity.patternMismatch) {
+                infomsg = "Only alphanumeric characters allowed.";
+            } else if (reason.validity.valueMissing) {
+                infomsg = "Reason is required.";
             }
 
-            if (reason.validity.patternMismatch) {
-                errormsg = "Only alphanumeric characters allowed.";
-                reason.setCustomValidity(errormsg);
-                error.textContent = errormsg;
-                return;
-            }
+            reason.setCustomValidity(infomsg);
+            info.textContent = infomsg;
 
-            if (reason.validity.valueMissing) {
-                errormsg = "Reason is required.";
-                reason.setCustomValidity(errormsg);
-                error.textContent = errormsg;
-                return;
-            }
-
-            error.textContent = "";
-            message.setCustomValidity("");
+            form_errors.push({
+                field: "reason",
+                value: reason.value,
+                error: infomsg,
+            });
         }
+
 
         function messageValidation() {
             const message = document.getElementById("message");
-            let error = document.getElementById("error");
-            let errormsg;
-            message.addEventListener("input", () =>{
+            const info = document.getElementById("info");
+
+            message.addEventListener("input", () => {
                 message.setCustomValidity("");
-                if (message.checkValidity()) {
-                    error.textContent = "";
-                    return;
-                } else {
+                if (!message.checkValidity()) {
                     showMessageError();
+                } else {
+                    info.textContent = "";
                 }
             });
         }
 
         function showMessageError() {
             const message = document.getElementById("message");
-            let error = document.getElementById("error");
-            let errormsg;
+            const info = document.getElementById("info");
+            let infomsg;
+
             if (message.validity.tooShort) {
-                errormsg = "Message must be at least 5 characters.";
-                message.setCustomValidity(errormsg);
-                error.textContent = errormsg;
-                return;
+                infomsg = "Message must be at least 5 characters.";
+            } else if (message.validity.valueMissing) {
+                infomsg = "Message is required.";
             }
 
-            if (message.validity.valueMissing) {
-                errormsg = "Message is required.";
-                message.setCustomValidity(errormsg);
-                error.textContent = errormsg;
-                return;
-            }
+            message.setCustomValidity(infomsg);
+            info.textContent = infomsg;
 
-            error.textContent = "";
-            message.setCustomValidity("");
+            form_errors.push({
+                field: "message",
+                value: message.value,
+                error: infomsg,
+            });
+        }
+
+
+        function setupCharCounter() {
+            const message = document.getElementById("message");
+            const counter = document.getElementById("charCount");
+            const max = message.maxLength; 
+            message.addEventListener("input", () => {
+                const len = message.value.length;
+                counter.textContent = `${len} / ${max}`;
+                if (len > max) {
+                    message.value = message.value.slice(0, max);
+                    return; 
+                }
+                counter.style.color = "gray";
+                if (len >= max * 0.8 && len < max) {
+                    counter.style.color = "orange";
+                } else if (len >= max) {
+                    counter.style.color = "red";
+                    message.style.backgroundColor = "#f8d7da";
+                    const info = document.getElementById("info");
+                    info.textContent = "Message exceeded maximum allowed characters.";
+                    form_errors.push({
+                        field: "message",
+                        value: message.value,
+                        error: "Exceeded maximum characters",
+                    });
+                    setTimeout(() => {
+                        message.style.backgroundColor = "";
+                        info.textContent = "";
+                    }, 2000);
+                    message.setCustomValidity("Message exceeded maximum allowed characters.");
+                }
+            });
+        }
+
+        function maskInvalidChars(field, pattern) {
+            const error = document.getElementById("error");
+            field.addEventListener("input", () => {
+                const value = field.value;
+                const lastChar = value.slice(-1);
+                if (!lastChar) return; 
+                if (!pattern.test(lastChar)) {
+                    field.style.backgroundColor = "#f8d7da";
+                    setTimeout(() => field.style.backgroundColor = "", 350);
+                    error.textContent = `Illegal character typed in ${field.name}`;
+                    setTimeout(() => {
+                        error.textContent = "";
+                    }, 2000);
+                }
+            });
+        }
+
+        function setupFormErrorCapture() {
+            const form = document.getElementById("contactform");
+            form.addEventListener("submit", (event) => {
+                document.getElementById("form_errors").value = JSON.stringify(form_errors);
+            });
         }
 
         window.addEventListener("DOMContentLoaded", loadHandler); 
         </script>
     </head>
+
     <body>
         <form id="contactform" action="https://httpbin.org/post" method="post">
-            <label for="name">Name:</label>
-            <input type="text" name="name" id="name" placeholder="Name" minlength="2" maxlength="50" pattern="[A-Za-z0-9\s]+" required>
+             <label for="name">Name:</label>
+            <input type="text" name="name" id="name" placeholder="Name" 
+            minlength="2" maxlength="50" pattern="[A-Za-z0-9\s]+" required>
             <label for="email">Email:</label>
-            <input type="email" name="email" id="email" placeholder="Email" minlength="2" maxlength="50" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" required>
+            <input type="email" name="email" id="email" placeholder="Email" 
+            minlength="2" maxlength="50" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" required>
             <label for="reason">Reason for contact:</label>
-            <input type="text" name="reason" id="reason" list="reasonsuggestions" placeholder="Reason" minlength="2" maxlength="50" pattern="[A-Za-z0-9\s]+" required>
+            <input type="text" name="reason" id="reason" list="reasonsuggestions" placeholder="Reason" 
+            minlength="2" maxlength="50" pattern="[A-Za-z0-9\s]+" required>
             <datalist id="reasonsuggestions">
                 <option value="Question">
                 <option value="Comment">
                 <option value="Want to Connect">
             </datalist>
             <label for="message">Message:</label>
-            <textarea name="message" id="message" rows="5" placeholder="Message" minlength="5" maxlength="500" required></textarea>
+            <textarea name="message" id="message" rows="5" placeholder="Message"
+            minlength="5" maxlength="500" required></textarea>
+            <div id="charCount" style="font-size: 0.9rem; color: gray;">
+                0 / 500
+            </div>
             <input type="hidden" name="possible_bot" value="true">
+            <input type="hidden" name="form-errors" id="form_errors" value="">
             <input type="submit" value="Submit">
             <output id="error" name="error"></output>
             <output id="info" name="info"></output>
