@@ -54,7 +54,7 @@
 }
 
 ::view-transition-group(root) {
-    animation-duration: 1.2s;
+    animation-duration: 0.75s;
 }
 
 
@@ -79,7 +79,6 @@ body {
     background: var(--bg-color);
     color: var(--text-color);
     font-family: Arial, sans-serif;
-    transition: background 0.3s, color 0.3s;
     margin: 0;
 }
 
