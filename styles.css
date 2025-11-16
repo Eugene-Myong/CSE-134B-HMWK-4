@@ -4,6 +4,17 @@
     --gap-default: 2em;
     --border-radius-default: 12px;
     --navbar-diff-exact: 55px;
+    --bg-color: white;
+    --text-color: black;
+    --btn-bg: white;
+    --btn-text: black;
+}
+
+.dark-mode {
+    --bg-color: #33373d;
+    --text-color: white;
+    --btn-bg: #33373d;
+    --btn-text: white;
 }
 
 @font-face {
@@ -38,8 +49,29 @@
     font-style: italic;
 }
 
+#toggle-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 18px;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border-color: var(--btn-text);
+    border: 1px solid #8884;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    font-size: 14px;
+    user-select: none;
+}
+
 body {
     font-family: 'TeX Gyre Adventor', sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+    transition: background 0.3s, color 0.3s;
+    margin: 0;
 }
 
 html, body {
@@ -403,6 +435,7 @@ iframe {
     flex-direction: column;  
     align-items: center;
     text-align: center;
+    /*border: hidden;*/
 }
 
 #contactform label {
@@ -429,19 +462,32 @@ iframe {
 
 
                                         /*about page*/
+
+quote-generator{
+    display: block;
+    width: 400px;
+    height: 125px;
+    border: 2px solid black;
+}
+
 #quotegen {
     display: flex;
-    flex-direction: column;      
+    flex-direction: column;    
+    justify-content: space-between;
+    padding: 20px;  
     align-items: center;        
     text-align: center;         
-    margin: 40px auto;           
+    margin: 20px auto;           
     max-width: 800px;  
     min-width: 300px;          
     width: 80%;                  
     border-radius: var(--border-radius-default);
+    border-color: var(--text-color);
+
 
     blockquote {
         margin: 0 0 1.5rem 0;
+        flex-grow: 1;
     }
 
     p {
@@ -453,7 +499,7 @@ iframe {
     cite {
         display: block;
         font-style: italic;
-        color: black;
+        color: var(--text-color);
     }
 }
 

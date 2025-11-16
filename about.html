@@ -4,14 +4,6 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>About Page</title>
-        <style>
-            quote-generator{
-                display: block;
-                width: 400px;
-                height: 125px;
-                border: 2px solid black;
-            }
-        </style>
         <link rel="icon" href="images/bigbrain.png">
         <link rel="stylesheet" href="styles.css">
     </head>
@@ -217,7 +209,16 @@
             <hr>
         </main>
         <footer>
+            <button id="toggle-btn">Toggle Theme</button>
             <i>Trademark Eugene Myong, All Rights Reserved</i>
         </footer>
+        <noscript>
+            <style>
+                #toggle-btn {
+                    display: none !important;
+                }
+            </style>
+        </noscript>
+        <script src="script.js"></script>
     </body>
 </html>
